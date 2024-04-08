@@ -7,7 +7,13 @@ const titulo = document.querySelector('.app__title');
 const botoes = document.querySelectorAll('.app__card-button');
 const musicaFocoInput = document.querySelector('#alternar-musica');
 const musica = new Audio('/sons/luna-rise-part-one.mp3');
+const startPauseBt = document.querySelector('#start-pause');
+
+let intervaloId = null;
+let tempoDecorridoEmSegundos = 5;
 musica.loop = true;
+
+
 
 musicaFocoInput.addEventListener('change', () => {
     if (musica.paused) {
@@ -61,4 +67,31 @@ function alterarContexto(contexto) {
     }
 }
 
+// faz a lógica da contagem regressiva e zerando quando bater o tempo no if
+const contagemRegressiva = () =>{
+    if(tempoDecorridoEmSegundos <= 0){
+        zerar();
+        alert('tempo finalizado!');
+        return 
 
+    };
+    tempoDecorridoEmSegundos -= 1;
+    console.log('temporizador ' + tempoDecorridoEmSegundos);
+};
+
+startPauseBt.addEventListener('click', iniciarOuPausar);
+
+// inicia o contador dando a variável um set e dentro do if zera o valor do intervalor para sempre poder pausar e continuar
+function iniciarOuPausar(){
+    if(intervaloId){
+        zerar();
+        return;
+    };
+    intervaloId = setInterval(contagemRegressiva, 1000)
+}
+ 
+// zerar o intervaloId para que não fique em looping o alert
+function zerar(){
+    clearInterval(intervaloId);
+    intervaloId = null;
+}
