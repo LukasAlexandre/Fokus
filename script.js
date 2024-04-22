@@ -7,8 +7,13 @@ const titulo = document.querySelector('.app__title');
 const botoes = document.querySelectorAll('.app__card-button');
 const musicaFocoInput = document.querySelector('#alternar-musica');
 const musica = new Audio('/sons/luna-rise-part-one.mp3');
+const iniciarOuPausarBt = document.querySelector('#start-pause span')
 const startPauseBt = document.querySelector('#start-pause');
+const audioPlay = new Audio('/sons/play.wav');
+const audioPausa = new Audio('/sons/pause.mp3');
+const audioTempoFinalizado = new Audio('./sons/beep.mp3')
 
+let contPlay = 1;
 let intervaloId = null;
 let tempoDecorridoEmSegundos = 5;
 musica.loop = true;
@@ -59,6 +64,7 @@ function alterarContexto(contexto) {
             <strong class="app__title-strong">Faça uma pausa curta!.</strong>`
             break;
         case "descanso-longo":
+            // usar a tag innerHTML para adicionar algum contexto que tenha tags html
             titulo.innerHTML = `Hora de voltar à superficie,<br>
             <strong class="app__title-strong">Faça uma pausa Longa!.</strong>`
             break;
@@ -68,30 +74,40 @@ function alterarContexto(contexto) {
 }
 
 // faz a lógica da contagem regressiva e zerando quando bater o tempo no if
-const contagemRegressiva = () =>{
-    if(tempoDecorridoEmSegundos <= 0){
-        zerar();
+const contagemRegressiva = () => {
+    if (tempoDecorridoEmSegundos <= 0) {
+        // audioTempoFinalizado.play()
         alert('tempo finalizado!');
-        return 
-
+        zerar();
+        return
     };
     tempoDecorridoEmSegundos -= 1;
     console.log('temporizador ' + tempoDecorridoEmSegundos);
 };
 
+// adiciona o evento de clicar iniciar o temporizador no console log
 startPauseBt.addEventListener('click', iniciarOuPausar);
 
+
+
 // inicia o contador dando a variável um set e dentro do if zera o valor do intervalor para sempre poder pausar e continuar
-function iniciarOuPausar(){
-    if(intervaloId){
+function iniciarOuPausar() {
+    if (intervaloId) {
+        audioPausa.play()
         zerar();
         return;
     };
+    audioPlay.play()
     intervaloId = setInterval(contagemRegressiva, 1000)
+    // usar a tag textContent para adicionar algo no html, mas não insere Tags, apenas Textos
+    iniciarOuPausarBt.textContent = "Pausar"
 }
- 
+
 // zerar o intervaloId para que não fique em looping o alert
-function zerar(){
+function zerar() {
     clearInterval(intervaloId);
+    iniciarOuPausarBt.textContent = "Começar"
     intervaloId = null;
 }
+
+// 
